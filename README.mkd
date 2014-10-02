@@ -1,0 +1,8 @@
+Cylinders
+=========
+
+author: Jef Wagner (jefwagner@gmail.com)
+date: 26-9-2014
+
+
+This is a monte-carlo simulation that strives to look at the interaction between many cylindrical particles.
