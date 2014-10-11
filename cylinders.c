@@ -30,7 +30,7 @@ static vec3 cyl_point( cyl c, double l){
 	return vec3_add( c.p, vec3_smul( c.d, l));
 }
 
-int cyl_box_overlap( cyl c, vec3 b0, vec3 b1){
+int cyl_box_overlap( cyl c, vec3 box){
 	vec3 pend, pmin, pmax;
 
 	pend = vec3_add( c.p, c.d);
@@ -42,12 +42,12 @@ int cyl_box_overlap( cyl c, vec3 b0, vec3 b1){
 	pmax.y = max( pend.y, c.p.y);
 	pmax.z = max( pend.z, c.p.z);
 
-	out = pmin.x > b0.x+c.r;
-	out *= pmin.y > b0.y+c.r;
-	out *= pmin.z > b0.z+c.r;
-	out *= pmax.x < b0.x+c.r;
-	out *= pmax.y < b0.y+c.r;
-	out *= pmax.z < b0.z+c.r;
+	out = pmin.x > c.r;
+	out *= pmin.y > c.r;
+	out *= pmin.z > c.r;
+	out *= pmax.x < box.x+c.r;
+	out *= pmax.y < box.y+c.r;
+	out *= pmax.z < box.z+c.r;
 	return out;
 }
 
@@ -99,7 +99,14 @@ int cyl_cyl_overlap( cyl c0, cyl c1){
 }
 
 /*!
- * A structure that holds everything
+ * A structure that holds the state.
+ *
+ * The data structure is a 3-D array of linked list. Each element in
+ * the array corresponds to a box in 3-D space, and the linked list
+ * hold pointers to the cylinders that reside in that box. The
+ * cylinders are storred in the `a` array, the pointers to the next
+ * element in the linked list are in the `next` array, and the heads
+ * of the linked list for each box are in the `heads` array.
  */
 typedef struct{
 	int n;
@@ -107,25 +114,6 @@ typedef struct{
 	int *next;
 	int *heads;
 } state;
-
-/*!
- * This structure loops through all cylinders by looping through
- * all the boxes, and looping through each box.
- */
- void example_loop( state *s){
- 	int i, j, k, ii
-	for( i=0; i<NBX; i++){
-		for( j=0; j<NBY; j++){
-			for( k=0; k<NBZ; k++){
-				ii = s->heads[NBZ*NBY*i+NBY*j+k];
-				while( ii > 0 ){
-					/* do work with s->a[ii] */
-					ii = s->next[ii];
-				}
-			}
-		}
-	}
-}
 
 /*!
  * Constructor for the state.
@@ -168,11 +156,30 @@ void state_free( state* s){
 }
 
 /*!
- * 
+ * System parameters
  */
-int valid_move( const state *s, cyl c){
+typedef struct{
+	int nbx, nby, nbz;
+	double r, d;
+	vec3 box;
+} system_params;
+
+/*!
+ * This structure loops through all cylinders.
+ */
+void example_loop( state *s, vec3 box){
+	int i;
+	for( i=0; i<s->n; i++){
+		/* work on s->a[i] */
+	}
+}
+
+void example_cyl_loop( state *s, vec3 box,
+					   cyl c, int index){
+	int i, j, k, ii;
 
 }
+
 
 void state_initialize( state *s){
 	int i;
