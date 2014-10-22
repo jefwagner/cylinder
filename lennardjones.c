@@ -13,7 +13,7 @@
  * which gives the ratio between the position of the minimum, and the
  * position of the zero.
  */
-typedef struct{ double u0, double r0} lj_params;
+typedef struct{ double u0, r0;} lj_params;
 #define TWO_1_6 1.122462048309373
 
 /*!
@@ -69,8 +69,8 @@ double lj_truncated( double r, lj_params p){
  */
 double lj_shifted( double r, lj_params p){
 	double u;
-	if( r > p.r_0){
-		u = 0.
+	if( r > p.r0){
+		u = 0.;
 	}else{
 		u = p.r0/r;
 		u = u*u*u*u*u*u;

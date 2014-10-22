@@ -22,8 +22,8 @@
  * vec2_dot : inner product
  * vec2_cross : 2-dim cross product
  * vec2_mag : magnitude
- * vec2_norm : noralized vector
- * vec2_normto : in place normalized vector
+ * vec2_unit : noralized vector
+ * vec2_unitto : in place normalized vector
  * vec2_rot : rotation
  * vec2_rotto : in place rotation
  * vec2_dist : distance between two 2-vectors
@@ -90,12 +90,12 @@ static inline double vec2_mag( vec2 p){
 	return sqrt( p.x*p.x + p.y*p.y);
 }
 
-static inline vec2 vec2_norm( vec2 p){
+static inline vec2 vec2_unit( vec2 p){
 	double mag = vec2_mag( p);
 	return vec2_smul( p, 1./mag);
 }
 
-static inline vec2 vec2_norm2( vec2 *p){
+static inline void vec2_unitto( vec2 *p){
 	double mag = vec2_mag( *p);
 	vec2_smulto( p, 1./mag);
 }
@@ -112,7 +112,7 @@ static inline vec2 vec2_rot( vec2 v, double th){
 static inline void vec2_rotto( vec2 *v, double th){
 	double x;
 	double c = cos(th);
-	double x = sin(th);
+	double s = sin(th);
 	x = v->x*c - v->y*s;
 	v->y = v->y*c + v->x*s;
 	v->x = x;
@@ -140,10 +140,10 @@ static inline double vec2_dist( vec2 p0, vec2 p1){
  * vec3_smulto : in place scalar multiplication
  * vec3_dot : inner product
  * vec3_cross : 3-dim cross product
- * vec3_cross : in place cross product
+ * vec3_crossto : in place cross product
  * vec3_mag : magnitude
- * vec3_norm : noralized vector
- * vec3_normto : in place normalized vector
+ * vec3_unit : noralized vector
+ * vec3_unitto : in place normalized vector
  * vec3_rotAA : axis angle rotation
  * vec3_rotAAto : in place axis angle rotation
  * vec3_dist : distance between two 3-vectors
@@ -218,7 +218,7 @@ static inline vec3 vec3_cross( vec3 p0, vec3 p1){
 	return pout;
 }
 
-static inline void vec3_crossto( vec3 *p0, vec3 *p1){
+static inline void vec3_crossto( vec3 *p0, vec3 p1){
 	double x, y;
 	x = p0->y*p1.z - p0->z*p1.y;
 	y = p0->z*p1.x - p0->x*p1.z;
@@ -231,12 +231,12 @@ static inline double vec3_mag( vec3 p){
 	return sqrt( p.x*p.x + p.y*p.y + p.z*p.z);
 }
 
-static inline vec3 vec3_norm( vec3 p){
+static inline vec3 vec3_unit( vec3 p){
 	double mag = vec3_mag( p);
 	return vec3_smul( p, 1./mag);
 }
 
-static inline vec3 vec3_normto( vec3 *p){
+static inline void vec3_unitto( vec3 *p){
 	double mag = vec3_mag( *p);
 	vec3_smulto( p, 1./mag);
 }
@@ -245,7 +245,7 @@ static inline vec3 vec3_rotAA( vec3 v, vec3 u, double th ){
 	vec3 vout;
 	double c = cos(th);
 	double s = sin(th);
-	vec3_normto( &u);
+	vec3_unitto( &u);
 	vout.x = (c + u.x*u.x*(1.-c))*v.x;
 	vout.x += (u.x*u.y*(1.-c)-u.z*s)*v.y;
 	vout.x += (u.x*u.z*(1.-c)+u.y*s)*v.z;
@@ -262,7 +262,7 @@ static inline void vec3_rotAAto( vec3 *v, vec3 u, double th ){
 	double x, y;
 	double c = cos(th);
 	double s = sin(th);
-	vec3_normto( &u);
+	vec3_unitto( &u);
 	x = (c + u.x*u.x*(1.-c))*v->x;
 	x += (u.x*u.y*(1.-c)-u.z*s)*v->y;
 	x += (u.x*u.z*(1.-c)+u.y*s)*v->z;
@@ -272,8 +272,8 @@ static inline void vec3_rotAAto( vec3 *v, vec3 u, double th ){
 	v->z = (u.z*u.x*(1-c)-u.y*s)*v->x;
 	v->z += (u.z*u.y*(1-c)+u.x*s)*v->y;
 	v->z += (c + u.z*u.z*(1-c))*v->z;
-	v->x = x
-	v->y = y
+	v->x = x;
+	v->y = y;
 }
 
 static inline double vec3_dist( vec3 p0, vec3 p1){
