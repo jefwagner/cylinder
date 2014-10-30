@@ -148,6 +148,7 @@ int cyl_list_add( state *s, int l){
  * Move a cylinder to a new bucket based on a new point `pnew`.
  */
 int cyl_list_move( state *s, int l, vec3 pnew){
+	int retval;
 	cyl_ll *cur;
 	vec3 p = s->a[l].c.p;
 	int i = (int) p.x/s->bucket.x;
@@ -159,24 +160,29 @@ int cyl_list_move( state *s, int l, vec3 pnew){
 	int jj = (int) pnew.y/s->bucket.y;
 	int kk = (int) pnew.z/s->bucket.z;
 	int mm = (s->nbx)*( (s->nby)*kk + jj) + ii;
-	if( m != mm ){
-		cur = s->heads[m];
-		if( cur == &(s->a[l])){
-			s->heads[m] = cur->next;
-		}
+	if( m == mm ){
+		return 1;
+	}
+	/* remove the cyl from list `m` */
+	cur = s->heads[m];
+	if( cur == &(s->a[l])){
+		s->heads[m] = cur->next;
+		retval = 1;
+	}else{
 		while( cur->next != &(s->a[l]) && cur->next != NULL ){
 			cur = cur->next;
 		}
-		if( cur->next == NULL ){
-			s->a[l].next = s->heads[mm];
-			s->heads[mm] = &(s->a[l]);
-			return 0;
-		}else{
+		if( cur->next != NULL ){
 			cur->next = cur->next->next;
-			return 1;
+			retval = 1;
+		}else{
+			retval = 0;
 		}
 	}
-	return 1;
+	/* add the cyl to the list `mm` */
+	s->a[l].next = s->heads[mm];
+	s->heads[mm] = &(s->a[l]);
+	return retval;
 }
 
 /*!
