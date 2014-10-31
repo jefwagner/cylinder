@@ -2,7 +2,13 @@
 
 #include "manybody.c"
 
+int cyl_print_ln( FILE *file, cyl c){
+	return fprintf( file, "%1.3e %1.3e %1.3e %1.3e %1.3e %1.3e %1.3e \n",
+		            c.p.x, c.p.y, c.p.z, c.d.x, c.d.y, c.d.z, c.r);
+}
+
 void state_test(){
+	FILE *file;
 	int result = 0;
 	cyl_params cp = {0.2, 1};
 	vec3 box = {20., 20.5, 11.};
@@ -70,6 +76,17 @@ void state_test(){
 	}else{
 		fprintf( stdout, "failed!\n");
 	}
+
+	fprintf( stdout, "Testing state_print: ");
+	file = fopen( "test_uniform.dat", "w");
+	result = state_print( file, s);
+	fclose( file);
+	if( result ){
+		fprintf( stdout, "passed!\n");
+	}else{
+		fprintf( stdout, "failed!\n");
+	}	
+	fprintf( stdout, " printed to file \"test_uniform.dat\"\n");
 
 	state_free( s);
 }

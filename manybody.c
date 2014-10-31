@@ -16,6 +16,7 @@
  */
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <math.h>
 
 #include "vecs.h"
@@ -297,4 +298,29 @@ int state_uniform_initialize( state *s){
 	}
 
 	return 1;
+}
+
+/*!
+ * Print the state (list of cylinders)
+ */
+int state_print( FILE *file, state *s){
+	int i, n, m;
+	m = fprintf( file, "Box \n");
+	n = (m >= 0);
+	m = fprintf( file, " x         y         z\n");
+	n = (m >= 0);
+	m = fprintf( file, "%1.3e %1.3e %1.3e\n", s->box.x, s->box.y, s->box.z);
+	n = (m >= 0);
+	m = fprintf( file, "State: \n");
+	m = fprintf( file, "Number %d \n", s->n);
+	n = (m >= 0);
+	m = fprintf( file, "pos.x     pos.y     pos.z");
+	n = n && (m >= 0);
+	m = fprintf( file, "     dir.x     dir.y     dir.z     r \n");
+	n = n && (m >= 0);
+	for( i=0; i<s->n; i++){
+		m = cyl_print_ln( file, s->a[i].c);
+		n = n && (m >= 0);
+	}
+	return n;
 }

@@ -21,5 +21,6 @@ inline static vec3 cyl_point( cyl c, double l){
 int cyl_box_overlap( cyl c, vec3 box);
 double cyl_dist( cyl c0, cyl c1);
 int cyl_cyl_overlap( cyl c0, cyl c1);
+int cyl_print_ln( FILE *file, cyl c);
 
 #endif /* JW_CYLINDERS*/

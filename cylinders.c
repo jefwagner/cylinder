@@ -4,6 +4,8 @@
  *********************************************************************
  */
 
+#include <stdio.h>
+
 #include "vecs.h"
 #include "distributions.h"
 #include "math_const.h"
@@ -76,8 +78,12 @@ double cyl_dist( cyl c0, cyl c1){
 	double t0 = -vec3_dot( pm, c0.d);
 	double t1 = vec3_dot( pm, c1.d);
 	double det = a*d - b*b;
-	double l0 = (d*t0 + b*t1)/det;
-	double l1 = (b*t0 + a*t1)/det;
+	if( det != 0. ){
+		double l0 = (d*t0 + b*t1)/det;
+		double l1 = (b*t0 + a*t1)/det;
+	}else{
+		
+	}
 	if( l0 < 0. ){
 		p0 = c0.p;
 	}else if( l0 <= 1. ){
@@ -99,3 +105,10 @@ int cyl_cyl_overlap( cyl c0, cyl c1){
 	return( cyl_dist( c0, c1) < c0.r+c1.r );	
 }
 
+/*!
+ * Print the cylinder dimensions
+ */
+int cyl_print_ln( FILE *file, cyl c){
+	return fprintf( file, "%1.3e %1.3e %1.3e %1.3e %1.3e %1.3e %1.3e \n",
+		            c.p.x, c.p.y, c.p.z, c.d.x, c.d.y, c.d.z, c.r);
+}

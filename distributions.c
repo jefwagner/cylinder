@@ -4,6 +4,8 @@
  *********************************************************************
  */
 
+#include <stdlib.h>
+
 #include "vecs.h"
 #include "math_const.h"
 
@@ -17,7 +19,7 @@ vec2 rand_disk(){
 	do{
 		p.x = 2.*rand()/RAND_MAX-1.;
 		p.y = 2.*rand()/RAND_MAX-1.;
-	}while( vec2_mag(p) < 1 );
+	}while( vec2_mag(p) > 1 );
 	return p;
 }
 
@@ -32,7 +34,7 @@ vec3 rand_ball(){
 		p.x = 2.*rand()/RAND_MAX-1.;
 		p.y = 2.*rand()/RAND_MAX-1.;
 		p.z = 2.*rand()/RAND_MAX-1.;
-	}while( vec3_mag(p) < 1 );
+	}while( vec3_mag(p) > 1 );
 	return p;	
 }
 
@@ -44,7 +46,7 @@ vec3 rand_ball(){
  * `v` with a half- angle of `th_max`.
  */ 
 vec3 rand_rot( vec3 v, double th_max ){
-	vec3 u, vout;
+	vec3 u;
 	/* azimuthal angle */
     double ph = 2.*PI*rand()/RAND_MAX;
     /* polar angle, properly weighted using the inverse of the CDF. */

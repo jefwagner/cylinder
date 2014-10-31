@@ -78,6 +78,12 @@ void cyl_test(){
 		fprintf( stdout, "failed!\n");
 	}
 
+	fprintf( stdout, "Testing cyl_print_ln: \n");
+	fprintf( stdout, "--- The following lines should match \n");
+	cyl_print_ln( stdout, c0);
+	fprintf( stdout, "%1.3e %1.3e %1.3e %1.3e %1.3e %1.3e %1.3e \n",
+		            c0.p.x, c0.p.y, c0.p.z, c0.d.x, c0.d.y, c0.d.z, c0.r);
+
 }
 
 int main(){
